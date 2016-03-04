@@ -1,0 +1,26 @@
+<h1>Athens Library</h1>
+
+<a href="/books">View All of Books</a>
+<a href="/classes">View All Patrons</a>
+
+
+<h3>Add a Patron</h3>
+<form action="/patrons" method="post">
+<p>Patron Name:</p>
+<input type="text" name="patron_name">
+<br><br>
+<button type="submit">Add Patron</button>
+</form>
+
+<h3>Add a Book</h3>
+<form action="/books" method="post">
+<p>Book Name:</p>
+<input type="text" name="Book_Title">
+<p>Author Code:</p>
+<input type="numbers" name="Author_Id">
+<br><br>
+<p>Copies:</p>
+<input type="numbers" name="copies">
+<br><br>
+<button type="submit">Add Book</button>
+</form>

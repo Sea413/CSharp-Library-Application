@@ -31,7 +31,7 @@ namespace Library
 
 
         [Fact]
-    public void Test_Save_SavesClassToDatabase()
+    public void Test_Save_SavesBookToDatabase()
     {
       //Arrange
       Book testBook = new Book("Illiad",12,4);
@@ -40,6 +40,10 @@ namespace Library
       //Act
       List<Book> result = Book.GetAll();
       List<Book> testList = new List<Book>{testBook};
+
+
+      Console.WriteLine("Testing line" + result[0].GetTitle() + result[0].GetAuthorId());
+      Console.WriteLine("Testing Second Line" + testList[0].GetTitle() + testList[0].GetAuthorId());
 
       //Assert
       Assert.Equal(testList, result);
@@ -57,6 +61,9 @@ namespace Library
       Book savedBook = Book.GetAll()[0];
       int result = savedBook.GetId();
       int testId = testBook.GetId();
+
+
+      // Console.WriteLine("Testing line {0} title {1} copies {2} authorid {3}", savedBook.GetId(), savedBook.GetTitle(), savedBook.GetCopies(), savedBook.GetAuthorId());
 
       //Assert
       Assert.Equal(testId, result);

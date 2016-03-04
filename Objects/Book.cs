@@ -11,7 +11,7 @@ namespace Library
     private int _copies;
     private int _authorId;
 
-    public Book( string Title, int Copies, int authorID, int Id = 0)
+    public Book(string Title, int authorID, int Copies, int Id = 0)
     {
       _id = Id;
       _title = Title;
@@ -32,7 +32,7 @@ namespace Library
           bool titleEquality = this.GetTitle() == newBook.GetTitle();
           bool copiesEquality = this.GetCopies() ==newBook.GetCopies();
           bool authoridEquality =this.GetAuthorId()==newBook.GetAuthorId();
-          return (idEquality && titleEquality && authoridEquality && authoridEquality);
+          return (idEquality && titleEquality && copiesEquality && authoridEquality);
         }
     }
     public int GetId()
@@ -55,28 +55,32 @@ namespace Library
     {
       return _copies;
     }
+
     public void Save()
     {
-      Sqlconnection conn = DB.Connection();
+      SqlConnection conn = DB.Connection();
       SqlDataReader rdr;
-      conn.open;
+      conn.Open();
 
-      Sqlcommand cmd = new Sqlcommand ("INSERT INTO Books (Title, Author_id, copies) OutPut Inserted.id values (@BookTitle, @AuthorID @Copies)", conn);
+      SqlCommand cmd = new SqlCommand ("INSERT INTO Books (Title, Author_id, copies) OUTPUT INSERTED.id VALUES (@BookTitle, @AuthorID, @Copies);", conn);
 
         SqlParameter titleParameter = new SqlParameter();
         titleParameter.ParameterName = "@BookTitle";
         titleParameter.Value = this.GetTitle();
+
         cmd.Parameters.Add(titleParameter);
 
         SqlParameter AuthorIDParameter = new SqlParameter();
         AuthorIDParameter.ParameterName = "@AuthorID";
         AuthorIDParameter.Value = this.GetAuthorId();
+
         cmd.Parameters.Add(AuthorIDParameter);
 
-        SqlParameter copiesparameter = new SqlParameter();
-        copiesparameter.ParameterName = "@Copies";
-        copiesparameter.Value = this.GetId();
-        cmd.Parameters.Add(copiesparameter);
+        SqlParameter copiesParameter = new SqlParameter();
+        copiesParameter.ParameterName = "@Copies";
+        copiesParameter.Value = this.GetCopies();
+
+        cmd.Parameters.Add(copiesParameter);
 
         rdr = cmd.ExecuteReader();
 
@@ -100,6 +104,7 @@ namespace Library
         SqlCommand cmd = new SqlCommand("DELETE FROM Books;", conn);
         cmd.ExecuteNonQuery();
       }
+
       public static Book Find(int id)
       {
       SqlConnection conn = DB.Connection();
@@ -124,9 +129,9 @@ namespace Library
         foundBookId = rdr.GetInt32(0);
         foundTitle = rdr.GetString(1);
         foundAuthorId = rdr.GetInt32(2);
-        foundcopies = rdr.GetInt32(3);
+        foundCopies = rdr.GetInt32(3);
       }
-      Book foundBook = new Book(foundBookName, foundAutherId, foundcopies);
+      Book foundBook = new Book(foundTitle, foundAuthorId, foundCopies, foundBookId);
 
       if (rdr != null)
       {
@@ -147,7 +152,7 @@ namespace Library
             SqlDataReader rdr = null;
             conn.Open();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM class;", conn);
+            SqlCommand cmd = new SqlCommand("SELECT * FROM Books;", conn);
             rdr = cmd.ExecuteReader();
 
             while(rdr.Read())
@@ -156,10 +161,9 @@ namespace Library
               string BookName = rdr.GetString(1);
               int AuthorId = rdr.GetInt32(2);
               int copies = rdr.GetInt32(3);
-              Book newBook = new Book(BookName, AuthorId, classId, copies);
+              Book newBook = new Book(BookName, AuthorId, copies, BookId);
               allBooks.Add(newBook);
             }
-
             if (rdr != null)
             {
               rdr.Close();
@@ -168,7 +172,6 @@ namespace Library
             {
               conn.Close();
             }
-
             return allBooks;
           }
       //     public void Update(string newTitle, int newauthorId,int copies)

@@ -1,0 +1,12 @@
+<h1> Students </h1>
+
+<ul>
+@{ if (Model.Count != null) {
+  @foreach (var patrons in Model) {
+     <li><a href="/patrons/@patrons.GetId()">@patrons.GetName()</a></li>
+    }
+  }
+}
+</ul>
+
+<a href="/"> Go Back</a>

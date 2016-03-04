@@ -1,60 +1,68 @@
-// using System;
-// using System.Collections.Generic;
-// using Nancy;
-// using Nancy.ViewEngines.Razor;
-//
-// namespace Registrar
-// {
-//   public class HomeModule : NancyModule
-//   {
-//     public HomeModule()
-//     {
-//       Get["/"] = _ => {
-//         return View["index.cshtml"];
-//       };
-//
-//       Get["/students"] = _ => {
-//       List<Student> AllStudents = Student.GetAll();
-//       return View["students.cshtml", AllStudents];
-//       };
-//
-//       Get["/classes"] = _ => {
-//       List<Class> AllClasses = Class.GetAll();
-//       return View["classes.cshtml", AllClasses];
-//       };
-//
-//       Get["/class/{id}"] = parameters => {
-//       Dictionary<string, object> model = new Dictionary<string, object>();
-//       Class selectedClass = Class.Find(parameters.id);
-//       List<Student> allStudents = Student.GetAll();
-//       List<Student> classStudents = selectedClass.GetStudents();
-//       model.Add("class", selectedClass);
-//       model.Add("allStudents", allStudents);
-//       model.Add("classStudents", classStudents);
-//       return View["class.cshtml", model];
-//       };
-//
-//       Post["class/add_student"] = _ => {
-//       Class selectedClass = Class.Find(Request.Form["class-id"]);
-//       Student student = Student.Find(Request.Form["student-id"]);
-//       selectedClass.AddStudent(student);
-//       List<Class> AllClasses = Class.GetAll();
-//       return View["classes.cshtml", AllClasses];
-//     };
-//
-//       Post["/students"] = _ => {
-//       Student newStudent = new Student(Request.Form["student_name"], Request.Form["student_enrollment"]);
-//       newStudent.Save();
-//       List<Student> AllStudents = Student.GetAll();
-//       return View["students.cshtml", AllStudents];
-//       };
-//
-//       Post["/classes"] = _ => {
-//       Class newClass = new Class(Request.Form["class_name"], Request.Form["class_code"]);
-//       newClass.Save();
-//       List<Class> AllClasses = Class.GetAll();
-//       return View["classes.cshtml", AllClasses];
-//       };
-//     }
-//   }
-// }
+using System;
+using System.Collections.Generic;
+using Nancy;
+using Nancy.ViewEngines.Razor;
+
+namespace Library
+{
+  public class HomeModule : NancyModule
+  {
+    public HomeModule()
+    {
+      Get["/"] = _ => {
+        return View["index.cshtml"];
+      };
+
+      Get["/books"] = _ => {
+      List<Book> AllBooks = Book.GetAll();
+      return View["books.cshtml", AllBooks];
+      };
+
+      Get["/patrons"] = _ => {
+      List<Patron> AllPatrons = Patron.GetAll();
+      return View["patron.cshtml", AllPatrons];
+      };
+
+
+      Get["/patrons/{id}"] = parameters => {
+         Dictionary<string, object> model = new Dictionary<string, object>();
+         Patron selectedPatron = Patron.Find(parameters.id);
+         List<Book> allBooks = Book.GetAll();
+         List<Book> bookpatrons = selectedPatron.GetBooks();
+         model.Add("patrons", selectedPatron);
+         model.Add("books", allBooks);
+         model.Add("checkedout", bookpatrons);
+         return View["patrons.cshtml", model];
+         };
+
+        //  Get["/books/{id}"] = parameters => {
+        //     Dictionary<string, object> model = new Dictionary<string, object>();
+        //     Book selectedBook = Book.Find(parameters.id);
+        //     model.Add("book", selectedBook);
+        //     return View["patrons.cshtml", model];
+        //     };
+
+      //    Post["patron/add_book"] = _ => {
+      //    Book selectedBook = Book.Find(Request.Form["book-id"]);
+      //    Patron selectedpatron = Patron.Find(Request.Form["patron-id"]);
+      //    selectedpatron.AddBook(selectedBook);
+      //    List<Patron> AllPatron = Patron.GetAll();
+      //    return View["classes.cshtml", AllPatron];
+      //  };
+
+         Post["/patrons"] = _ => {
+         Patron newPatron = new Patron(Request.Form["patron_name"]);
+         newPatron.Save();
+         List<Patron> AllPatrons = Patron.GetAll();
+         return View["patron.cshtml", AllPatrons];
+         };
+
+         Post["/books"] = _ => {
+         Book newBook = new Book(Request.Form["Book_Title"], Request.Form["Author_Id"],Request.Form["copies"]);
+         newBook.Save();
+         List<Book> AllBooks = Book.GetAll();
+         return View["books.cshtml", AllBooks];
+         };
+       }
+     }
+   }

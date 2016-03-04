@@ -1,0 +1,26 @@
+<h1> Patrons in @Model["patrons"].GetName()</h1>
+
+<ul>
+@{ if (Model["checkedout"].Count != 0) {
+  @foreach (var patrons in Model["checkedout"]) {
+     <li>@patrons.GetName()</li>
+    }
+  }
+}
+</ul>
+
+<h4>Add a Book to this Patron:</h4>
+<form action='/patron/add_book' method='post'>
+  <input id='patron-id' name='patron-id' type='hidden' value='@Model["patrons"].GetId()'>
+  <button type='submit'>Add</button>
+  <label for='book-id'>Select a book</label>
+  <select id='book-id' name='book-id' type='text'>
+    @foreach (var book in @Model["books"])
+    {
+      <option value='@book.GetId()'> @book.GetTitle()</option>
+    }
+  </select>
+  <button type ='submit'>Add</button>
+</form>
+
+<a href="/patron"> Go Back</a>

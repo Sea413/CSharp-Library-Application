@@ -1,0 +1,12 @@
+<h1> Books </h1>
+
+<ul>
+@{ if (Model.Count != null) {
+  @foreach (var books in Model) {
+     <li><a href="/books/@books.GetId()">@books.GetTitle()</a></li>
+    }
+  }
+}
+</ul>
+
+<a href="/"> Go Back</a>
